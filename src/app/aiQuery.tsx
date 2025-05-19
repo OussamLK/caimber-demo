@@ -27,24 +27,26 @@ export default function AiQuery({
     }
   }
   return (
-    <>
-      <textarea
-        className="border-solid border-2 m-2 p-4 "
-        rows={10}
-        cols={70}
-        value={textValue}
-        onChange={e => setTextValue(e.currentTarget.value)}
-      />
-      {question && <QuestionSematic q={question} />}
+    <div className="flex gap-2">
+      <div className="flex-2 order-2">
+        <textarea
+          className="border-solid border-2 m-2 p-4 "
+          rows={10}
+          cols={70}
+          value={textValue}
+          onChange={e => setTextValue(e.currentTarget.value)}
+        />
+        {question && <QuestionSematic q={question} />}
+      </div>
       <ChatBox
-        className="border-2 p-2"
+        className="border-2 p-2 flex-1 order-1 min-w-min"
         setQuestion={(question: Question) => {
           setQuestion(question);
         }}
         askQuestion={askQuestion}
         textValue={textValue}
       />
-    </>
+    </div>
   );
 }
 
