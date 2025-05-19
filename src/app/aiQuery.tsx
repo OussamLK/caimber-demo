@@ -20,10 +20,8 @@ export default function AiQuery({
     state?: Record<string, any>
   ) => Promise<Question>;
 }) {
-  const [llmAnswer, setLlmAnswer] = useState<string | undefined>(undefined);
   const [query, setQuery] = useState<string>('');
   const [question, setQuestion] = useState<Question | undefined>(undefined);
-  const [messages, setMessages] = useState<string[]>([]);
   const [textValue, setTextValue] = useState<string>(lotrExcerpt);
   function parseAnswer(answer: Record<string, any>) {
     if (answer.type === 'TextAnswer') {
@@ -48,23 +46,12 @@ export default function AiQuery({
         onChange={e => setTextValue(e.currentTarget.value)}
       />
       {question && <QuestionSematic q={question} />}
-      <Chat messages={messages} />
       <ChatBox
         query={query}
         setQuery={setQuery}
         doAskQuestion={doAskQuestion}
       />
     </>
-  );
-}
-
-function Chat({ messages }: { messages: string[] }) {
-  return (
-    <ul>
-      {messages.map((m, key) => (
-        <li key={key}>m</li>
-      ))}
-    </ul>
   );
 }
 
