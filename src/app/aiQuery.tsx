@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { type Question } from './page';
 
-const lotrExerpt = `Consulting  him  constantly  upon  the  growing  of  vegetables in  the  matter  of  ‘roots’,  especially  potatoes,  the  Gaffer  was recognized  as  the  leading  authority  by  all  in  the  neighbourhood  (including  himself). 
+const lotrExcerpt = `Consulting  him  constantly  upon  the  growing  of  vegetables in  the  matter  of  ‘roots’,  especially  potatoes,  the  Gaffer  was recognized  as  the  leading  authority  by  all  in  the  neighbourhood  (including  himself). 
 
 ‘But  what  about  this  Frodo  that  lives  with  him?’  asked  Old Noakes  of  Bywater.  ‘Baggins  is  his  name,  but  he’s  more  than half  a  Brandybuck,  they  say.  It  beats  me  why  any  Baggins of  Hobbiton  should  go  looking  for  a  wife  away  there  in Buckland,  where  folks  are  so  queer.’ 
 
@@ -24,7 +24,7 @@ export default function AiQuery({
   const [query, setQuery] = useState<string>('');
   const [question, setQuestion] = useState<Question | undefined>(undefined);
   const [messages, setMessages] = useState<string[]>([]);
-  const [textValue, setTextValue] = useState<string>(lotrExerpt);
+  const [textValue, setTextValue] = useState<string>(lotrExcerpt);
   function parseAnswer(answer: Record<string, any>) {
     if (answer.type === 'TextAnswer') {
     }
@@ -47,6 +47,8 @@ export default function AiQuery({
         value={textValue}
         onChange={e => setTextValue(e.currentTarget.value)}
       />
+      {question && <QuestionSematic q={question} />}
+      <Chat messages={messages} />
       <br />
       <label>
         What question do you want to create?
@@ -66,8 +68,6 @@ export default function AiQuery({
         Create
       </button>
       <br />
-      {question && <QuestionSematic q={question} />}
-      <Chat messages={messages} />
     </>
   );
 }
