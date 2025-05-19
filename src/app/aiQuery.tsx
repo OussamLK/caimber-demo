@@ -20,21 +20,11 @@ export default function AiQuery({
     state?: Record<string, any>
   ) => Promise<Question>;
 }) {
-  const [query, setQuery] = useState<string>('');
   const [question, setQuestion] = useState<Question | undefined>(undefined);
   const [textValue, setTextValue] = useState<string>(lotrExcerpt);
   function parseAnswer(answer: Record<string, any>) {
     if (answer.type === 'TextAnswer') {
     }
-  }
-  function doAskQuestion() {
-    askQuestion(
-      query,
-      `This is an assessement for kids on the paragraph '''${textValue}'''`
-    ).then(a => {
-      console.log(`The llm answered ${JSON.stringify(a)}`);
-      setQuestion(a);
-    });
   }
   return (
     <>
@@ -47,9 +37,9 @@ export default function AiQuery({
       />
       {question && <QuestionSematic q={question} />}
       <ChatBox
-        query={query}
-        setQuery={setQuery}
-        doAskQuestion={doAskQuestion}
+        setQuestion={setQuestion}
+        askQuestion={askQuestion}
+        textValue={textValue}
       />
     </>
   );
@@ -100,7 +90,17 @@ export function QuestionSematic({ q }: { q: Question }) {
   }
 }
 
-function ChatBox({ query, setQuery, doAskQuestion }: any) {
+function ChatBox({ setQuestion, textValue, askQuestion }: any) {
+  const [query, setQuery] = useState<string>('');
+  function doAskQuestion() {
+    askQuestion(
+      query,
+      `This is an assessement for kids on the paragraph '''${textValue}'''`
+    ).then(a => {
+      console.log(`The llm answered ${JSON.stringify(a)}`);
+      setQuestion(a);
+    });
+  }
   return (
     <div>
       <br />
