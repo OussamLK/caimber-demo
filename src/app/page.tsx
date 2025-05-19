@@ -8,7 +8,7 @@ const mll = new MLL();
 export default async function Home() {
   return (
     <main className="m-2">
-      <p>welcome home</p>
+      <p className="text-center text-4xl">Homework Editor</p>
       <br />
       <AiQuery askQuestion={genQuertion} />
     </main>

@@ -29,6 +29,15 @@ export default function AiQuery({
     if (answer.type === 'TextAnswer') {
     }
   }
+  function doAskQuestion() {
+    askQuestion(
+      query,
+      `This is an assessement for kids on the paragraph '''${textValue}'''`
+    ).then(a => {
+      console.log(`The llm answered ${JSON.stringify(a)}`);
+      setQuestion(a);
+    });
+  }
   return (
     <>
       <textarea
@@ -43,20 +52,15 @@ export default function AiQuery({
         What question do you want to create?
         <input
           value={query}
+          onKeyDown={e => {
+            if (e.key == 'Enter') doAskQuestion();
+          }}
           onChange={e => setQuery(e.currentTarget.value)}
           className="border-solid border-2 m-2 p-2 min-w-1/2"
         ></input>
       </label>
       <button
-        onClick={() =>
-          askQuestion(
-            query,
-            `This is an assessement for kids on the paragraph '''${textValue}'''`
-          ).then(a => {
-            console.log(`The llm answered ${JSON.stringify(a)}`);
-            setQuestion(a);
-          })
-        }
+        onClick={() => doAskQuestion()}
         className="bg-sky-700 p-4 m-2 text-white rounded-lg"
       >
         Create
