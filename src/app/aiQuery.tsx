@@ -37,6 +37,7 @@ export default function AiQuery({
       />
       {question && <QuestionSematic q={question} />}
       <ChatBox
+        className="border-2 p-2"
         setQuestion={(question: Question) => {
           setQuestion(question);
         }}
@@ -96,7 +97,9 @@ function ChatBox({
   setQuestion,
   textValue,
   askQuestion,
+  className,
 }: {
+  className: string;
   setQuestion: (question: Question) => void;
   askQuestion: (
     query: string,
@@ -116,7 +119,7 @@ function ChatBox({
     });
   }
   return (
-    <div>
+    <div className={className}>
       <br />
       <label>
         What question do you want to create?
