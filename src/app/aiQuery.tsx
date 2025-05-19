@@ -1,6 +1,6 @@
 'use client';
-import { useState } from 'react';
-import { type Question } from './page';
+import { useEffect, useState } from 'react';
+import MLL from '../mll';
 
 const lotrExcerpt = `Consulting  him  constantly  upon  the  growing  of  vegetables in  the  matter  of  ‘roots’,  especially  potatoes,  the  Gaffer  was recognized  as  the  leading  authority  by  all  in  the  neighbourhood  (including  himself). 
 
@@ -11,17 +11,74 @@ const lotrExcerpt = `Consulting  him  constantly  upon  the  growing  of  vegeta
 ‘You’re  right,  Dad!’  said  the  Gaffer.  ‘Not  that  the  Brandybucks  of  Buckland  live  in  the  Old  Forest;  but  they’re  a  queer breed,  seemingly.  They  fool  about  with  boats  on  that  big river  -  and  that  isn’t  natural.  Small  wonder  that  trouble  cameof  it,  I  say.  But  be  that  as  it  may,  Mr.  Frodo  is  as  nice  a young  hobbit  as  you  could  wish  to  meet.  Very  much  like Mr.  Bilbo,  and  in  more  than  looks.  After  all  his  father  was a  Baggins.  A  decent  respectable  hobbit  was  Mr.  Drogo Baggins;  there  was  never  much  to  tell  of  him,  till  he  was drownded.’ 
 `;
 
+export type Question = FillIn | MultiChoice | FreeForm;
+type FillIn = {
+  type: 'FillIn';
+  questionStatement: string;
+  textToFill: string;
+  gaps: Gap[];
+  grading: Grading;
+};
+type MultiChoice = {
+  type: 'MultiChoice';
+  questionStatement: string;
+  choices: Choice[];
+  correctAnswerId: number;
+  grading: Grading;
+};
+type FreeForm = {
+  type: 'FreeForm';
+  questionStatement: string;
+  AnswerExpectedToContain: string;
+  grading: Grading;
+};
+type Grading = { correct: number; wrong: number };
+type Gap = { Prompt: string; correctAnswer: string };
+type Choice = { id: number; prompt: string };
+
+const QuestionSyntaxString = `
+  type Questions = FillIn | MultiChoice | FreeForm
+type Grading = {correct: number, wrong: number}
+type Gap = {Prompt: string, correctAnswer: string}
+type FillIn = {
+	type: "FillIn",
+	questionStatement: string,
+	textToFill: string,
+	gaps: Gap[],
+	grading: Grading
+}
+type MultiChoice = {
+	type: "MultiChoice",
+	questionStatement: string,
+	choices: Choice[],
+	correctAnswerId: number,
+	grading: Grading
+}
+type FreeForm = {
+	type: "FreeForm",
+	questionStatement: string,
+	AnswerExpectedToContain: string,
+	grading: Grading
+
+}
+
+type Grading = { correct: number; wrong: number };
+type Gap = { Prompt: string; correctAnswer: string };
+type Choice = { id: number; prompt: string };
+
+`;
+
 export default function AiQuery({
-  askQuestion,
+  queryServerAction,
 }: {
-  askQuestion: () => (
-    query: string,
-    context: string,
-    state?: Record<string, any>
-  ) => Promise<Question>;
+  queryServerAction: (q: string) => Promise<Object>;
 }) {
   const [question, setQuestion] = useState<Question | undefined>(undefined);
   const [textValue, setTextValue] = useState<string>(lotrExcerpt);
+  const [mll, setMll] = useState<MLL<Question> | undefined>(undefined);
+  useEffect(() => {
+    setMll(new MLL<Question>(queryServerAction, [], QuestionSyntaxString));
+  }, []);
   function parseAnswer(answer: Record<string, any>) {
     if (answer.type === 'TextAnswer') {
     }
@@ -38,14 +95,16 @@ export default function AiQuery({
         />
         {question && <QuestionSematic q={question} />}
       </div>
-      <ChatBox
-        className="border-2 p-2 flex-1 order-1 min-w-min"
-        setQuestion={(question: Question) => {
-          setQuestion(question);
-        }}
-        askQuestion={askQuestion}
-        textValue={textValue}
-      />
+      {mll && (
+        <ChatBox
+          className="border-2 p-2 flex-1 order-1 min-w-min"
+          setQuestion={(question: Question) => {
+            setQuestion(question);
+          }}
+          askQuestion={mll.makeQuery}
+          textValue={textValue}
+        />
+      )}
     </div>
   );
 }

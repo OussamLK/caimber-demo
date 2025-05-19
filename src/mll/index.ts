@@ -1,15 +1,20 @@
-import 'server-only';
 import { GoogleGenAI } from '@google/genai';
 import fs from 'fs';
 
-export default class MLL {
-  private _histories: Record<string, string[]>;
-  _rawQuery: (q: string) => string;
-  constructor(queryFunction: (q: string) => string) {
-    this._histories = new Proxy({}, _historyProxyHandler);
+export default class MLL<AbstractSyntax> {
+  private _history: string[];
+  private _rawQuery: (q: string) => Promise<Object>;
+  private _AbstractSyntaxString: string;
+  constructor(
+    queryFunction: (q: string) => Promise<Object>,
+    history: string[],
+    AbstractSyntaxString: string
+  ) {
+    this._history = history;
     this._rawQuery = queryFunction;
+    this._AbstractSyntaxString = AbstractSyntaxString;
   }
-  static rawQuery = async (q: string): Promise<Object> => {
+  static serverSideRawQuery = async (q: string): Promise<Object> => {
     const client = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
     const resp = await client.models.generateContent({
       model: 'gemini-2.0-flash-001',
@@ -23,67 +28,26 @@ export default class MLL {
     }
     return JSON.parse(resp.text);
   };
-  createQueryFunction = <AbstractSyntax>(
-    AbstractSyntaxString: string,
-    topicId: string
-  ): ((
+  makeQuery = async (
     query: string,
     context: string,
     state?: Record<string, any>
-  ) => Promise<AbstractSyntax>) => {
-    const f = async (
-      query: string,
-      context: string,
-      state?: Record<string, any>
-    ) => {
-      const q = `This is the context for the query '''${context}'''
+  ): Promise<AbstractSyntax> => {
+    const q = `This is the context for the query '''${context}'''
       ${state && `this is the current state of things '''${serialize(state, 'state')}'''`}
-      This is the history for context '''${JSON.stringify(this._histories[topicId])}'''
+      This is the history for context '''${JSON.stringify(this._history)}'''
       You are going to answer the query '''${query}'''
-      Answer with a single object (not a list) following this schema: '''${AbstractSyntaxString}'''`;
+      Answer with a single object (not a list) following this schema: '''${this._AbstractSyntaxString}'''`;
 
-      console.debug(`Querying the llm with \n\n''''''''\n ${q} \n'''''''\n\n`);
+    console.debug(`Querying the llm with \n\n''''''''\n ${q} \n'''''''\n\n`);
 
-      const resp = await this._rawQuery(q);
-      this._histories[topicId].push(query);
-      this._histories[topicId].push(JSON.stringify(resp));
-      return resp;
-    };
+    const resp = await this._rawQuery(q);
+    this._history.push(JSON.stringify({ user: query }));
+    this._history.push(JSON.stringify({ system: resp }));
     //@ts-ignore
-    return f;
-  };
-  extractGrammar = (name: string, filePath: string): string => {
-    //right up 99 hackey alley
-    const content = fs.readFileSync(filePath, 'utf-8');
-    console.log(content);
-    const lines = content.split('\n');
-    let grammar_lines = [];
-    for (let i = 0; i < lines.length; i++) {
-      if (lines[i].includes(`${name}-grammar-start`)) {
-        grammar_lines.push(lines[i]);
-      } else if (lines[i].includes(`${name}-grammar-end`)) {
-        grammar_lines.push(lines[i]);
-        break;
-      }
-    }
-    const res = grammar_lines.join('\n');
-    console.log(`extracted grammar ${res}`);
-    return res;
+    return resp;
   };
 }
-
-//Making histories a bit easier to handle
-const _historyProxyHandler = {
-  get(target: Record<string, any>, property: string) {
-    if (target[property] === undefined) {
-      target[property] = [];
-    }
-    return target[property];
-  },
-  set(target: Record<string, any>, property: string, value: any) {
-    throw 'Do not directly mutate histories, only pushing strings allowed';
-  },
-};
 
 function serialize(obj: Record<any, any>, objectName: string) {
   try {
