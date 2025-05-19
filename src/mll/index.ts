@@ -2,17 +2,16 @@ import 'server-only';
 import { GoogleGenAI } from '@google/genai';
 import fs from 'fs';
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-
 export default class MLL {
-  private _client: GoogleGenAI;
   private _histories: Record<string, string[]>;
-  constructor() {
-    this._client = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+  _rawQuery: (q: string) => string;
+  constructor(queryFunction: (q: string) => string) {
     this._histories = new Proxy({}, _historyProxyHandler);
+    this._rawQuery = queryFunction;
   }
-  rawQuery = async (q: string): Promise<Object> => {
-    const resp = await this._client.models.generateContent({
+  static rawQuery = async (q: string): Promise<Object> => {
+    const client = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+    const resp = await client.models.generateContent({
       model: 'gemini-2.0-flash-001',
       contents: q,
       config: {
@@ -45,7 +44,7 @@ export default class MLL {
 
       console.debug(`Querying the llm with \n\n''''''''\n ${q} \n'''''''\n\n`);
 
-      const resp = await this.rawQuery(q);
+      const resp = await this._rawQuery(q);
       this._histories[topicId].push(query);
       this._histories[topicId].push(JSON.stringify(resp));
       return resp;

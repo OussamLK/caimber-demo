@@ -1,16 +1,13 @@
 'use server';
 import AiQuery from './aiQuery';
 import MLL from '../mll';
-import { useState } from 'react';
-
-const mll = new MLL();
 
 export default async function Home() {
   return (
     <main className="m-2">
       <p className="text-center text-4xl">Homework Editor</p>
       <br />
-      <AiQuery askQuestion={genQuertion} />
+      <AiQuery askQuestion={getLangGen} />
     </main>
   );
 }
@@ -72,7 +69,4 @@ type Choice = { id: number; prompt: string };
 
 `;
 
-export const genQuertion = mll.createQueryFunction<Question>(
-  QuestionSyntaxString,
-  'question-generation'
-);
+export const getLangGen = MLL.rawQuery;

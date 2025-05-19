@@ -14,7 +14,7 @@ const lotrExcerpt = `Consulting  him  constantly  upon  the  growing  of  vegeta
 export default function AiQuery({
   askQuestion,
 }: {
-  askQuestion: (
+  askQuestion: () => (
     query: string,
     context: string,
     state?: Record<string, any>
