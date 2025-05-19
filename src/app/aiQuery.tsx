@@ -2,32 +2,13 @@
 import { useState } from 'react';
 import { type Question } from './page';
 
-const lotrExerpt = `consulting  him  constantly  upon  the  growing  of  vegetables  - 
-in  the  matter  of  ‘roots’,  especially  potatoes,  the  Gaffer  was 
-recognized  as  the  leading  authority  by  all  in  the  neighbour¬ 
-hood  (including  himself) . 
+const lotrExerpt = `Consulting  him  constantly  upon  the  growing  of  vegetables in  the  matter  of  ‘roots’,  especially  potatoes,  the  Gaffer  was recognized  as  the  leading  authority  by  all  in  the  neighbourhood  (including  himself). 
 
-‘But  what  about  this  Frodo  that  lives  with  him?’  asked  Old 
-Noakes  of  Bywater.  ‘Baggins  is  his  name,  but  he’s  more  than 
-half  a  Brandybuck,  they  say.  It  beats  me  why  any  Baggins 
-of  Hobbiton  should  go  looking  for  a  wife  away  there  in 
-Buckland,  where  folks  are  so  queer.’ 
+‘But  what  about  this  Frodo  that  lives  with  him?’  asked  Old Noakes  of  Bywater.  ‘Baggins  is  his  name,  but  he’s  more  than half  a  Brandybuck,  they  say.  It  beats  me  why  any  Baggins of  Hobbiton  should  go  looking  for  a  wife  away  there  in Buckland,  where  folks  are  so  queer.’ 
 
-‘And  no  wonder  they’re  queer,’  put  in  Daddy  Twofoot 
-(the  Gaffer’s  next-door  neighbour),  ‘if  they  live  on  the  wrong 
-side  of  the  Brandywine  River,  and  right  agin  the  Old  Forest. 
-That’s  a  dark  bad  place,  if  half  the  tales  be  true.’ 
+‘And  no  wonder  they’re  queer,’  put  in  Daddy  Twofoot (the  Gaffer’s  next-door  neighbour),  ‘if  they  live  on  the  wrong side  of  the  Brandywine  River,  and  right  agin  the  Old  Forest. That’s  a  dark  bad  place,  if  half  the  tales  be  true.’ 
 
-‘You’re  right,  Dad!’  said  the  Gaffer.  ‘Not  that  the  Brandy- 
-bucks  of  Buckland  live  in  the  Old  Forest;  but  they’re  a  queer 
-breed,  seemingly.  They  fool  about  with  boats  on  that  big 
-river  -  and  that  isn’t  natural.  Small  wonder  that  trouble  came 
-of  it,  I  say.  But  be  that  as  it  may,  Mr.  Frodo  is  as  nice  a 
-young  hobbit  as  you  could  wish  to  meet.  Very  much  like 
-Mr.  Bilbo,  and  in  more  than  looks.  After  all  his  father  was 
-a  Baggins.  A  decent  respectable  hobbit  was  Mr.  Drogo 
-Baggins;  there  was  never  much  to  tell  of  him,  till  he  was 
-drownded.’ 
+‘You’re  right,  Dad!’  said  the  Gaffer.  ‘Not  that  the  Brandybucks  of  Buckland  live  in  the  Old  Forest;  but  they’re  a  queer breed,  seemingly.  They  fool  about  with  boats  on  that  big river  -  and  that  isn’t  natural.  Small  wonder  that  trouble  cameof  it,  I  say.  But  be  that  as  it  may,  Mr.  Frodo  is  as  nice  a young  hobbit  as  you  could  wish  to  meet.  Very  much  like Mr.  Bilbo,  and  in  more  than  looks.  After  all  his  father  was a  Baggins.  A  decent  respectable  hobbit  was  Mr.  Drogo Baggins;  there  was  never  much  to  tell  of  him,  till  he  was drownded.’ 
 `;
 
 export default function AiQuery({
@@ -36,7 +17,7 @@ export default function AiQuery({
   askQuestion: (
     query: string,
     context: string,
-    history: string[]
+    state?: Record<string, any>
   ) => Promise<Question>;
 }) {
   const [llmAnswer, setLlmAnswer] = useState<string | undefined>(undefined);
@@ -70,8 +51,7 @@ export default function AiQuery({
         onClick={() =>
           askQuestion(
             query,
-            `This is an assessement for kids on the paragraph '''${textValue}'''`,
-            []
+            `This is an assessement for kids on the paragraph '''${textValue}'''`
           ).then(a => {
             console.log(`The llm answered ${JSON.stringify(a)}`);
             setQuestion(a);

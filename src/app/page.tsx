@@ -72,5 +72,7 @@ type Choice = { id: number; prompt: string };
 
 `;
 
-export const genQuertion =
-  mll.createQueryFunction<Question>(QuestionSyntaxString);
+export const genQuertion = mll.createQueryFunction<Question>(
+  QuestionSyntaxString,
+  'question-generation'
+);

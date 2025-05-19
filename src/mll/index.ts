@@ -6,8 +6,10 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
 export default class MLL {
   private _client: GoogleGenAI;
+  private _histories: Record<string, string[]>;
   constructor() {
     this._client = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+    this._histories = new Proxy({}, _historyProxyHandler);
   }
   rawQuery = async (q: string): Promise<Object> => {
     const resp = await this._client.models.generateContent({
@@ -23,18 +25,30 @@ export default class MLL {
     return JSON.parse(resp.text);
   };
   createQueryFunction = <AbstractSyntax>(
-    AbstractSyntaxString: string
+    AbstractSyntaxString: string,
+    topicId: string
   ): ((
     query: string,
     context: string,
-    history: string[]
+    state?: Record<string, any>
   ) => Promise<AbstractSyntax>) => {
-    const f = async (query: string, context: string, history: string[]) => {
+    const f = async (
+      query: string,
+      context: string,
+      state?: Record<string, any>
+    ) => {
       const q = `This is the context for the query '''${context}'''
+      ${state && `this is the current state of things '''${serialize(state, 'state')}'''`}
+      This is the history for context '''${JSON.stringify(this._histories[topicId])}'''
       You are going to answer the query '''${query}'''
-      This is the history for context '''${JSON.stringify(history)} of the interaction'''
       Answer with a single object (not a list) following this schema: '''${AbstractSyntaxString}'''`;
-      return await this.rawQuery(q);
+
+      console.debug(`Querying the llm with \n\n''''''''\n ${q} \n'''''''\n\n`);
+
+      const resp = await this.rawQuery(q);
+      this._histories[topicId].push(query);
+      this._histories[topicId].push(JSON.stringify(resp));
+      return resp;
     };
     //@ts-ignore
     return f;
@@ -57,4 +71,25 @@ export default class MLL {
     console.log(`extracted grammar ${res}`);
     return res;
   };
+}
+
+//Making histories a bit easier to handle
+const _historyProxyHandler = {
+  get(target: Record<string, any>, property: string) {
+    if (target[property] === undefined) {
+      target[property] = [];
+    }
+    return target[property];
+  },
+  set(target: Record<string, any>, property: string, value: any) {
+    throw 'Do not directly mutate histories, only pushing strings allowed';
+  },
+};
+
+function serialize(obj: Record<any, any>, objectName: string) {
+  try {
+    return JSON.stringify(obj);
+  } catch (e) {
+    console.error(`can not serialize ${objectName}`);
+  }
 }
