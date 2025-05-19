@@ -49,25 +49,11 @@ export default function AiQuery({
       />
       {question && <QuestionSematic q={question} />}
       <Chat messages={messages} />
-      <br />
-      <label>
-        What question do you want to create?
-        <input
-          value={query}
-          onKeyDown={e => {
-            if (e.key == 'Enter') doAskQuestion();
-          }}
-          onChange={e => setQuery(e.currentTarget.value)}
-          className="border-solid border-2 m-2 p-2 min-w-1/2"
-        ></input>
-      </label>
-      <button
-        onClick={() => doAskQuestion()}
-        className="bg-sky-700 p-4 m-2 text-white rounded-lg"
-      >
-        Create
-      </button>
-      <br />
+      <ChatBox
+        query={query}
+        setQuery={setQuery}
+        doAskQuestion={doAskQuestion}
+      />
     </>
   );
 }
@@ -125,4 +111,29 @@ export function QuestionSematic({ q }: { q: Question }) {
   } else if (q.type === 'FillIn') {
     throw 'not implemented';
   }
+}
+
+function ChatBox({ query, setQuery, doAskQuestion }: any) {
+  return (
+    <div>
+      <br />
+      <label>
+        What question do you want to create?
+        <input
+          value={query}
+          onKeyDown={e => {
+            if (e.key == 'Enter') doAskQuestion();
+          }}
+          onChange={e => setQuery(e.currentTarget.value)}
+          className="border-solid border-2 m-2 p-2 min-w-1/2"
+        ></input>
+      </label>
+      <button
+        onClick={() => doAskQuestion()}
+        className="bg-sky-700 p-4 m-2 text-white rounded-lg"
+      >
+        Create
+      </button>
+    </div>
+  );
 }
