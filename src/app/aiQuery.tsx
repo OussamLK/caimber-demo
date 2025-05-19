@@ -37,7 +37,9 @@ export default function AiQuery({
       />
       {question && <QuestionSematic q={question} />}
       <ChatBox
-        setQuestion={setQuestion}
+        setQuestion={(question: Question) => {
+          setQuestion(question);
+        }}
         askQuestion={askQuestion}
         textValue={textValue}
       />
@@ -90,7 +92,19 @@ export function QuestionSematic({ q }: { q: Question }) {
   }
 }
 
-function ChatBox({ setQuestion, textValue, askQuestion }: any) {
+function ChatBox({
+  setQuestion,
+  textValue,
+  askQuestion,
+}: {
+  setQuestion: (question: Question) => void;
+  askQuestion: (
+    query: string,
+    context: string,
+    State?: Record<string, any>
+  ) => Promise<Question>;
+  textValue: string;
+}) {
   const [query, setQuery] = useState<string>('');
   function doAskQuestion() {
     askQuestion(
