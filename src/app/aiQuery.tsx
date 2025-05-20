@@ -94,7 +94,7 @@ export default function AiQuery({
   }
 
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-8">
       <div className="flex-2 order-2">
         <textarea
           className="border-solid border-2 ml-2 p-4 "
@@ -106,7 +106,7 @@ export default function AiQuery({
         {questions && (
           <ul className="m-4">
             {questions.map((q, key) => (
-              <li className="list-decimal mb-2" key={key}>
+              <li className="list-decimal mb-8" key={key}>
                 <QuestionSematic q={q} />
               </li>
             ))}
@@ -140,9 +140,8 @@ export function QuestionSematic({ q }: { q: Question }) {
   if (q.type === 'MultiChoice') {
     return (
       <div>
-        <p>{q.questionStatement}</p>
         <fieldset>
-          <legend className="font-bold">Choose one answer:</legend>
+          <legend className="font-bold">{q.questionStatement}</legend>
           {q.choices.map(choice => (
             <div key={choice.id}>
               <label
@@ -167,8 +166,9 @@ export function QuestionSematic({ q }: { q: Question }) {
   } else if (q.type === 'FreeForm') {
     return (
       <div>
-        <p>{q.questionStatement}</p>
+        <p className="font-bold">{q.questionStatement}</p>
         <input
+          className="border-1 rounded-sm p-2 mt-2 w-1/2"
           type="text"
           id="freeform_answer"
           name="freeform_answer"
