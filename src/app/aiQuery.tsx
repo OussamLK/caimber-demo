@@ -213,25 +213,36 @@ function ChatBox({
       .catch(e =>
         console.error(`error when interogating llm ${(e as Error).message}`)
       )
-      .finally(() => setIsLoading(false));
+      .finally(() => {
+        setIsLoading(false);
+        setQuery('');
+      });
   }
 
   return (
     <div className={className}>
-      <div className="mt-auto mb-1">
+      <div className="mt-auto mb-1 p-2">
         <br />
         <label>
-          What question do you want to create?
+          <p className="font-bold">What question do you want to create?</p>{' '}
+          <p className="text-sm">
+            (I can do free form, multiple choice, and fill in the gaps
+            questions)
+          </p>
           <input
             value={query}
             onKeyDown={e => {
               if (e.key == 'Enter') doAskQuestion();
             }}
             onChange={e => setQuery(e.currentTarget.value)}
-            className="border-solid border-2 m-2 p-2 min-w-1/2"
+            className="border-solid border-2 m-2 p-2 min-w-full"
           ></input>
         </label>
-        <SubmitButton isLoading={isLoading} onClick={doAskQuestion} />
+        <SubmitButton
+          className="block mr-2 ml-auto"
+          isLoading={isLoading}
+          onClick={doAskQuestion}
+        />
       </div>
     </div>
   );
