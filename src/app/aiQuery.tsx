@@ -97,7 +97,7 @@ export default function AiQuery({
       </div>
       {mll && (
         <ChatBox
-          className="border-2 p-2 flex-1 order-1 min-w-min"
+          className="border-2 p-2 flex-1 order-1 min-w-min h-screen"
           setQuestion={(question: Question) => {
             setQuestion(question);
           }}
@@ -181,24 +181,26 @@ function ChatBox({
   }
   return (
     <div className={className}>
-      <br />
-      <label>
-        What question do you want to create?
-        <input
-          value={query}
-          onKeyDown={e => {
-            if (e.key == 'Enter') doAskQuestion();
-          }}
-          onChange={e => setQuery(e.currentTarget.value)}
-          className="border-solid border-2 m-2 p-2 min-w-1/2"
-        ></input>
-      </label>
-      <button
-        onClick={() => doAskQuestion()}
-        className="bg-sky-700 p-4 m-2 text-white rounded-lg"
-      >
-        Create
-      </button>
+      <div className="mt-auto mb-1">
+        <br />
+        <label>
+          What question do you want to create?
+          <input
+            value={query}
+            onKeyDown={e => {
+              if (e.key == 'Enter') doAskQuestion();
+            }}
+            onChange={e => setQuery(e.currentTarget.value)}
+            className="border-solid border-2 m-2 p-2 min-w-1/2"
+          ></input>
+        </label>
+        <button
+          onClick={() => doAskQuestion()}
+          className="bg-sky-700 p-4 m-2 text-white rounded-lg"
+        >
+          Create
+        </button>
+      </div>
     </div>
   );
 }

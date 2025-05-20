@@ -4,7 +4,7 @@ import MLL from '../mll';
 
 export default async function Home() {
   return (
-    <main className="m-2">
+    <main className="m-2 h-full">
       <p className="text-center text-4xl">Homework Editor</p>
       <br />
       <AiQuery queryServerAction={getLangGen} />
