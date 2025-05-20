@@ -76,7 +76,7 @@ export default function AiQuery({
   const [question, setQuestion] = useState<Question | undefined>(undefined);
   const [textValue, setTextValue] = useState<string>(lotrExcerpt);
   const [mll, _] = useState<MLL<Question>>(
-    new MLL<Question>(queryServerAction, [], QuestionSyntaxString)
+    new MLL<Question>(queryServerAction, QuestionSyntaxString)
   );
   function parseAnswer(answer: Record<string, any>) {
     if (answer.type === 'TextAnswer') {

@@ -7,10 +7,9 @@ export default class MLL<AbstractSyntax> {
   private _AbstractSyntaxString: string;
   constructor(
     queryFunction: (q: string) => Promise<Object>,
-    history: string[],
     AbstractSyntaxString: string
   ) {
-    this._history = history;
+    this._history = [];
     this._rawQuery = queryFunction;
     this._AbstractSyntaxString = AbstractSyntaxString;
   }
