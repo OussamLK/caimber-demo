@@ -41,10 +41,9 @@ export default class MLL<AbstractSyntax> {
 
     console.debug(`Querying the llm with \n\n''''''''\n ${q} \n'''''''\n\n`);
 
-    const resp = await this._rawQuery(q);
+    const resp = (await this._rawQuery(q)) as AbstractSyntax;
     this._history.push(JSON.stringify({ user: query }));
     this._history.push(JSON.stringify({ system: resp }));
-    //@ts-ignore
     return resp;
   };
 }
