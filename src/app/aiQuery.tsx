@@ -216,24 +216,19 @@ function FillInGapsComp({ q }: { q: FillInGaps }) {
   return (
     <div>
       <p className="font-bold">{q.questionStatement}</p>
-      <p>{q.textToFill}</p>
-      <p className="font-bold">chuncks are now</p>
       <FillInGapsText text={q.textToFill} />
     </div>
   );
 }
 
 function FillInGapsText({ text }: { text: string }) {
-  const gaps = splitTextAtGaps(text);
-  return (
-    <ul>
-      {gaps.map((c, i) => (
-        <li className="list-disc" key={i}>
-          {c}
-        </li>
-      ))}
-    </ul>
-  );
+  const slices = splitTextAtGaps(text);
+  const inputSandwich = [<span>{slices[0]}</span>];
+  slices.slice(1).forEach(slice => {
+    inputSandwich.push(<input className="border-1 m-1 rounded-sm" />);
+    inputSandwich.push(<span>{slice}</span>);
+  });
+  return <p>{...inputSandwich}</p>;
 }
 
 type GapLocation = { start: number; end: number }; //end exlusive
