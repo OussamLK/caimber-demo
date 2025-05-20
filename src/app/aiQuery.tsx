@@ -75,7 +75,9 @@ export default function AiQuery({
 }: {
   queryServerAction: (q: string) => Promise<Object>;
 }) {
-  const [question, setQuestion] = useState<Question | undefined>(undefined);
+  const [currentQuestion, setCurrentQuestion] = useState<Question | undefined>(
+    undefined
+  );
   const [textValue, setTextValue] = useState<string>(lotrExcerpt);
   const mll = useMemo<MLL<Question>>(
     //MLL has an internal history state that I want to keep between renders
@@ -96,16 +98,19 @@ export default function AiQuery({
           value={textValue}
           onChange={e => setTextValue(e.currentTarget.value)}
         />
-        {question && (
+        {currentQuestion && (
           <div className="m-2 mt-4">
-            <QuestionSematic q={question} />
+            <QuestionSematic q={currentQuestion} />
+            <button className="bg-blue-900 block text-white mt-8 mr-0 ml-auto p-2 rounded-md font-bold">
+              Keep this question
+            </button>
           </div>
         )}
       </div>
       <ChatBox
         className="border-2 p-2 flex-1 order-1 min-w-min h-screen"
         setQuestion={(question: Question) => {
-          setQuestion(question);
+          setCurrentQuestion(question);
         }}
         askQuestion={mll.makeQuery}
         textValue={textValue}
