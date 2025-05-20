@@ -155,12 +155,7 @@ export function QuestionSematic({ q }: { q: Question }) {
       </div>
     );
   } else if (q.type === 'FillInGaps') {
-    return (
-      <div>
-        <p className="font-bold">{q.questionStatement}</p>
-        <p>{q.textToFill}</p>
-      </div>
-    );
+    return <FillInGapsComp q={q} />;
   }
 }
 
@@ -180,6 +175,7 @@ function ChatBox({
   textValue: string;
 }) {
   const [query, setQuery] = useState<string>('');
+
   function doAskQuestion() {
     askQuestion(
       query,
@@ -189,6 +185,7 @@ function ChatBox({
       setQuestion(a);
     });
   }
+
   return (
     <div className={className}>
       <div className="mt-auto mb-1">
@@ -213,4 +210,54 @@ function ChatBox({
       </div>
     </div>
   );
+}
+
+function FillInGapsComp({ q }: { q: FillInGaps }) {
+  return (
+    <div>
+      <p className="font-bold">{q.questionStatement}</p>
+      <p>{q.textToFill}</p>
+      <p className="font-bold">chuncks are now</p>
+      <FillInGapsText text={q.textToFill} />
+    </div>
+  );
+}
+
+function FillInGapsText({ text }: { text: string }) {
+  const gaps = splitTextAtGaps(text);
+  return (
+    <ul>
+      {gaps.map((c, i) => (
+        <li className="list-disc" key={i}>
+          {c}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+type GapLocation = { start: number; end: number }; //end exlusive
+
+function splitTextAtGaps(text: string): string[] {
+  let chuncks: string[] = [];
+  let lastGapEnd = 0;
+  console.debug(`gaps are ${getGaps(text)}`);
+  getGaps(text).forEach(gapLocation => {
+    const chunck = text.slice(lastGapEnd, gapLocation.start);
+    chuncks.push(chunck);
+    lastGapEnd = gapLocation.end;
+  });
+  chuncks.push(text.slice(lastGapEnd));
+  console.debug(`returning chuncks ${JSON.stringify(chuncks)}`);
+  return chuncks;
+}
+
+function getGaps(text: string): GapLocation[] {
+  // match all substrings that are at least 3 underscores long
+  const regex = /_{3,}/g;
+  const matches = text.matchAll(regex);
+  return [...matches].map(m => ({
+    start: m.index,
+    end: m.index + m[0].length,
+  }));
 }
