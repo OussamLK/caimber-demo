@@ -1,6 +1,7 @@
 'use client';
 import { useMemo, useState } from 'react';
 import MLL from '../mll';
+import SubmitButton from './SubmitButton';
 
 const lotrExcerpt = `Consulting  him  constantly  upon  the  growing  of  vegetables in  the  matter  of  ‘roots’,  especially  potatoes,  the  Gaffer  was recognized  as  the  leading  authority  by  all  in  the  neighbourhood  (including  himself). 
 
@@ -197,15 +198,22 @@ function ChatBox({
   textValue: string;
 }) {
   const [query, setQuery] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(false);
 
   function doAskQuestion() {
+    setIsLoading(true);
     askQuestion(
       query,
       `This is an assessement for kids on the paragraph '''${textValue}'''`
-    ).then(a => {
-      console.log(`The llm answered ${JSON.stringify(a)}`);
-      setQuestion(a);
-    });
+    )
+      .then(a => {
+        console.log(`The llm answered ${JSON.stringify(a)}`);
+        setQuestion(a);
+      })
+      .catch(e =>
+        console.error(`error when interogating llm ${(e as Error).message}`)
+      )
+      .finally(() => setIsLoading(false));
   }
 
   return (
@@ -223,12 +231,7 @@ function ChatBox({
             className="border-solid border-2 m-2 p-2 min-w-1/2"
           ></input>
         </label>
-        <button
-          onClick={() => doAskQuestion()}
-          className="bg-sky-700 p-4 m-2 text-white rounded-lg"
-        >
-          Create
-        </button>
+        <SubmitButton isLoading={isLoading} onClick={doAskQuestion} />
       </div>
     </div>
   );
