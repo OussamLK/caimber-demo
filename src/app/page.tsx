@@ -1,6 +1,6 @@
 'use server';
 import AiQuery from './aiQuery';
-import MLL from '../mll';
+import { rawQuery } from './ServerActions';
 
 export default async function Home() {
   return (
@@ -10,8 +10,4 @@ export default async function Home() {
       <AiQuery queryServerAction={rawQuery} />
     </main>
   );
-}
-
-export async function rawQuery(q: string): Promise<object> {
-  return await MLL.serverSideRawQuery(q);
 }

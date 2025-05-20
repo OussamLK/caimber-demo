@@ -247,8 +247,10 @@ function FillInGapsText({ text }: { text: string }) {
   const slices = splitTextAtGaps(text);
   const inputSandwich = [<span key={0}>{slices[0]}</span>];
   slices.slice(1).forEach((slice, key) => {
-    inputSandwich.push(<input key={key} className="border-1 m-1 rounded-sm" />);
-    inputSandwich.push(<span key={key}>{slice}</span>);
+    inputSandwich.push(
+      <input key={`${key + 1}-input`} className="border-1 m-1 rounded-sm" />
+    );
+    inputSandwich.push(<span key={`${key + 1}-span`}>{slice}</span>);
   });
   return <p>{...inputSandwich}</p>;
 }
