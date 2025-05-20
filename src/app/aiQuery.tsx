@@ -78,16 +78,21 @@ export default function AiQuery({
   const [currentQuestion, setCurrentQuestion] = useState<Question | undefined>(
     undefined
   );
+  const [questions, setQuestions] = useState<Question[]>([]);
   const [textValue, setTextValue] = useState<string>(lotrExcerpt);
   const mll = useMemo<MLL<Question>>(
     //MLL has an internal history state that I want to keep between renders
     () => new MLL<Question>(queryServerAction, QuestionSyntaxString),
     []
   );
-  function parseAnswer(answer: Record<string, any>) {
-    if (answer.type === 'TextAnswer') {
+  function keepCurrentQuestion() {
+    if (currentQuestion === undefined) {
+      throw 'adding an undefined question';
     }
+    setQuestions(questions => [...questions, currentQuestion]);
+    setCurrentQuestion(undefined);
   }
+
   return (
     <div className="flex gap-2">
       <div className="flex-2 order-2">
@@ -98,10 +103,22 @@ export default function AiQuery({
           value={textValue}
           onChange={e => setTextValue(e.currentTarget.value)}
         />
+        {questions && (
+          <ul className="m-4">
+            {questions.map((q, key) => (
+              <li className="list-decimal mb-2" key={key}>
+                <QuestionSematic q={q} />
+              </li>
+            ))}
+          </ul>
+        )}
         {currentQuestion && (
           <div className="m-2 mt-4">
             <QuestionSematic q={currentQuestion} />
-            <button className="bg-blue-900 block text-white mt-8 mr-0 ml-auto p-2 rounded-md font-bold">
+            <button
+              onClick={keepCurrentQuestion}
+              className="bg-blue-900 block text-white mt-8 mr-0 ml-auto p-2 rounded-md font-bold"
+            >
               Keep this question
             </button>
           </div>
