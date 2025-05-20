@@ -13,6 +13,7 @@ const lotrExcerpt = `Consulting  him  constantly  upon  the  growing  of  vegeta
 
 export type Question = FillInGaps | MultiChoice | FreeForm;
 type FillInGaps = {
+  //use underscores ______ to mark the gaps in the text
   type: 'FillInGaps';
   questionStatement: string;
   textToFill: string;
@@ -33,14 +34,15 @@ type FreeForm = {
   grading: Grading;
 };
 type Grading = { correct: number; wrong: number };
-type Gap = { Prompt: string; correctAnswer: string };
+type Gap = { id: number; Prompt: string; correctAnswer: string };
 type Choice = { id: number; prompt: string };
 
 const QuestionSyntaxString = `
   type Questions = FillInGaps | MultiChoice | FreeForm
 type Grading = {correct: number, wrong: number}
-type Gap = {Prompt: string, correctAnswer: string}
+type Gap = {id: number, Prompt: string, correctAnswer: string}
 type FillInGaps = {
+  //use underscores _______ to mark the gaps in the text
 	type: "FillInGaps",
 	questionStatement: string,
 	textToFill: string,
