@@ -11,9 +11,9 @@ const lotrExcerpt = `Consulting  him  constantly  upon  the  growing  of  vegeta
 ‘You’re  right,  Dad!’  said  the  Gaffer.  ‘Not  that  the  Brandybucks  of  Buckland  live  in  the  Old  Forest;  but  they’re  a  queer breed,  seemingly.  They  fool  about  with  boats  on  that  big river  -  and  that  isn’t  natural.  Small  wonder  that  trouble  cameof  it,  I  say.  But  be  that  as  it  may,  Mr.  Frodo  is  as  nice  a young  hobbit  as  you  could  wish  to  meet.  Very  much  like Mr.  Bilbo,  and  in  more  than  looks.  After  all  his  father  was a  Baggins.  A  decent  respectable  hobbit  was  Mr.  Drogo Baggins;  there  was  never  much  to  tell  of  him,  till  he  was drownded.’ 
 `;
 
-export type Question = FillIn | MultiChoice | FreeForm;
-type FillIn = {
-  type: 'FillIn';
+export type Question = FillInGaps | MultiChoice | FreeForm;
+type FillInGaps = {
+  type: 'FillInGaps';
   questionStatement: string;
   textToFill: string;
   gaps: Gap[];
@@ -37,11 +37,11 @@ type Gap = { Prompt: string; correctAnswer: string };
 type Choice = { id: number; prompt: string };
 
 const QuestionSyntaxString = `
-  type Questions = FillIn | MultiChoice | FreeForm
+  type Questions = FillInGaps | MultiChoice | FreeForm
 type Grading = {correct: number, wrong: number}
 type Gap = {Prompt: string, correctAnswer: string}
-type FillIn = {
-	type: "FillIn",
+type FillInGaps = {
+	type: "FillInGaps",
 	questionStatement: string,
 	textToFill: string,
 	gaps: Gap[],
@@ -94,7 +94,11 @@ export default function AiQuery({
           value={textValue}
           onChange={e => setTextValue(e.currentTarget.value)}
         />
-        {question && <QuestionSematic q={question} />}
+        {question && (
+          <div className="m-2 mt-4">
+            <QuestionSematic q={question} />
+          </div>
+        )}
       </div>
       <ChatBox
         className="border-2 p-2 flex-1 order-1 min-w-min h-screen"
@@ -148,8 +152,13 @@ export function QuestionSematic({ q }: { q: Question }) {
         />
       </div>
     );
-  } else if (q.type === 'FillIn') {
-    throw 'not implemented';
+  } else if (q.type === 'FillInGaps') {
+    return (
+      <div>
+        <p className="font-bold">{q.questionStatement}</p>
+        <p>{q.textToFill}</p>
+      </div>
+    );
   }
 }
 
