@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import MLL from '../mll';
 
 const lotrExcerpt = `Consulting  him  constantly  upon  the  growing  of  vegetables in  the  matter  of  ‘roots’,  especially  potatoes,  the  Gaffer  was recognized  as  the  leading  authority  by  all  in  the  neighbourhood  (including  himself). 
@@ -75,8 +75,10 @@ export default function AiQuery({
 }) {
   const [question, setQuestion] = useState<Question | undefined>(undefined);
   const [textValue, setTextValue] = useState<string>(lotrExcerpt);
-  const [mll, _] = useState<MLL<Question>>(
-    new MLL<Question>(queryServerAction, QuestionSyntaxString)
+  const mll = useMemo<MLL<Question>>(
+    //MLL has an internal history state that I want to keep between renders
+    () => new MLL<Question>(queryServerAction, QuestionSyntaxString),
+    []
   );
   function parseAnswer(answer: Record<string, any>) {
     if (answer.type === 'TextAnswer') {
