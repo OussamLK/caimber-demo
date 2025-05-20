@@ -141,7 +141,7 @@ export function QuestionSematic({ q }: { q: Question }) {
     return (
       <div>
         <fieldset>
-          <legend className="font-bold">{q.questionStatement}</legend>
+          <p className="font-bold">{q.questionStatement}</p>
           {q.choices.map(choice => (
             <div key={choice.id}>
               <label
