@@ -1,19 +1,18 @@
 import { GoogleGenAI } from '@google/genai';
-import fs from 'fs';
 
 export default class MLL<AbstractSyntax> {
   private _history: string[];
-  private _rawQuery: (q: string) => Promise<Object>;
+  private _rawQuery: (q: string) => Promise<object>;
   private _AbstractSyntaxString: string;
   constructor(
-    queryFunction: (q: string) => Promise<Object>,
+    queryFunction: (q: string) => Promise<object>,
     AbstractSyntaxString: string
   ) {
     this._history = [];
     this._rawQuery = queryFunction;
     this._AbstractSyntaxString = AbstractSyntaxString;
   }
-  static serverSideRawQuery = async (q: string): Promise<Object> => {
+  static serverSideRawQuery = async (q: string): Promise<object> => {
     const client = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
     const resp = await client.models.generateContent({
       model: 'gemini-2.0-flash-001',
@@ -30,7 +29,7 @@ export default class MLL<AbstractSyntax> {
   makeQuery = async (
     query: string,
     context: string,
-    state?: Record<string, any>
+    state?: Record<string, object>
   ): Promise<AbstractSyntax> => {
     const q = `This is the context for the query '''${context}'''
       ${state && `this is the current state of things '''${serialize(state, 'state')}'''`}
@@ -47,10 +46,10 @@ export default class MLL<AbstractSyntax> {
   };
 }
 
-function serialize(obj: Record<any, any>, objectName: string) {
+function serialize(obj: Record<string, object>, objectName: string) {
   try {
     return JSON.stringify(obj);
-  } catch (e) {
+  } catch {
     console.error(`can not serialize ${objectName}`);
   }
 }

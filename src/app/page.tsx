@@ -7,9 +7,11 @@ export default async function Home() {
     <main className="m-2 h-full">
       <p className="text-center text-4xl">Homework Editor</p>
       <br />
-      <AiQuery queryServerAction={getLangGen} />
+      <AiQuery queryServerAction={rawQuery} />
     </main>
   );
 }
 
-export const getLangGen = MLL.serverSideRawQuery;
+export async function rawQuery(q: string): Promise<object> {
+  return await MLL.serverSideRawQuery(q);
+}

@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import MLL from '../mll';
 
 const lotrExcerpt = `Consulting  him  constantly  upon  the  growing  of  vegetables in  the  matter  of  ‘roots’,  especially  potatoes,  the  Gaffer  was recognized  as  the  leading  authority  by  all  in  the  neighbourhood  (including  himself). 
@@ -37,7 +37,7 @@ type Grading = { correct: number; wrong: number };
 type Gap = { id: number; Prompt: string; correctAnswer: string };
 type Choice = { id: number; prompt: string };
 
-const QuestionSyntaxString = `
+const questionSyntaxString = `
   type Questions = FillInGaps | MultiChoice | FreeForm
 type Grading = {correct: number, wrong: number}
 type Gap = {id: number, Prompt: string, correctAnswer: string}
@@ -73,7 +73,7 @@ type Choice = { id: number; prompt: string };
 export default function AiQuery({
   queryServerAction,
 }: {
-  queryServerAction: (q: string) => Promise<Object>;
+  queryServerAction: (q: string) => Promise<object>;
 }) {
   const [currentQuestion, setCurrentQuestion] = useState<Question | undefined>(
     undefined
@@ -82,8 +82,8 @@ export default function AiQuery({
   const [textValue, setTextValue] = useState<string>(lotrExcerpt);
   const mll = useMemo<MLL<Question>>(
     //MLL has an internal history state that I want to keep between renders
-    () => new MLL<Question>(queryServerAction, QuestionSyntaxString),
-    []
+    () => new MLL<Question>(queryServerAction, questionSyntaxString),
+    [questionSyntaxString]
   );
   function keepCurrentQuestion() {
     if (currentQuestion === undefined) {
@@ -192,7 +192,7 @@ function ChatBox({
   askQuestion: (
     query: string,
     context: string,
-    State?: Record<string, any>
+    State?: Record<string, object>
   ) => Promise<Question>;
   textValue: string;
 }) {
@@ -245,10 +245,10 @@ function FillInGapsComp({ q }: { q: FillInGaps }) {
 
 function FillInGapsText({ text }: { text: string }) {
   const slices = splitTextAtGaps(text);
-  const inputSandwich = [<span>{slices[0]}</span>];
-  slices.slice(1).forEach(slice => {
-    inputSandwich.push(<input className="border-1 m-1 rounded-sm" />);
-    inputSandwich.push(<span>{slice}</span>);
+  const inputSandwich = [<span key={0}>{slices[0]}</span>];
+  slices.slice(1).forEach((slice, key) => {
+    inputSandwich.push(<input key={key} className="border-1 m-1 rounded-sm" />);
+    inputSandwich.push(<span key={key}>{slice}</span>);
   });
   return <p>{...inputSandwich}</p>;
 }
@@ -256,7 +256,7 @@ function FillInGapsText({ text }: { text: string }) {
 type GapLocation = { start: number; end: number }; //end exlusive
 
 function splitTextAtGaps(text: string): string[] {
-  let chuncks: string[] = [];
+  const chuncks: string[] = [];
   let lastGapEnd = 0;
   console.debug(`gaps are ${getGaps(text)}`);
   getGaps(text).forEach(gapLocation => {
