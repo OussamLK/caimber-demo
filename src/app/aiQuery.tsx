@@ -75,10 +75,9 @@ export default function AiQuery({
 }) {
   const [question, setQuestion] = useState<Question | undefined>(undefined);
   const [textValue, setTextValue] = useState<string>(lotrExcerpt);
-  const [mll, setMll] = useState<MLL<Question> | undefined>(undefined);
-  useEffect(() => {
-    setMll(new MLL<Question>(queryServerAction, [], QuestionSyntaxString));
-  }, []);
+  const [mll, _] = useState<MLL<Question>>(
+    new MLL<Question>(queryServerAction, [], QuestionSyntaxString)
+  );
   function parseAnswer(answer: Record<string, any>) {
     if (answer.type === 'TextAnswer') {
     }
@@ -87,7 +86,7 @@ export default function AiQuery({
     <div className="flex gap-2">
       <div className="flex-2 order-2">
         <textarea
-          className="border-solid border-2 m-2 p-4 "
+          className="border-solid border-2 ml-2 p-4 "
           rows={10}
           cols={70}
           value={textValue}
@@ -95,16 +94,14 @@ export default function AiQuery({
         />
         {question && <QuestionSematic q={question} />}
       </div>
-      {mll && (
-        <ChatBox
-          className="border-2 p-2 flex-1 order-1 min-w-min h-screen"
-          setQuestion={(question: Question) => {
-            setQuestion(question);
-          }}
-          askQuestion={mll.makeQuery}
-          textValue={textValue}
-        />
-      )}
+      <ChatBox
+        className="border-2 p-2 flex-1 order-1 min-w-min h-screen"
+        setQuestion={(question: Question) => {
+          setQuestion(question);
+        }}
+        askQuestion={mll.makeQuery}
+        textValue={textValue}
+      />
     </div>
   );
 }
