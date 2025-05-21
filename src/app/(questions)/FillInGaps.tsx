@@ -27,7 +27,9 @@ function FillInGapsText({
   );
   const currentGrade = gapValues
     .map((v, i) =>
-      v === q.gaps[i].correctAnswer ? q.grading.correct : q.grading.wrong
+      v.toLocaleLowerCase() === q.gaps[i].correctAnswer.toLocaleLowerCase()
+        ? q.grading.correct
+        : q.grading.wrong
     )
     .reduce((s, i) => s + i);
   useEffect(() => {
