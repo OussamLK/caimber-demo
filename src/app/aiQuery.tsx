@@ -4,6 +4,7 @@ import MLL from '../mll';
 import SubmitButton from './SubmitButton';
 import FillInGapsComp from './(questions)/FillInGaps';
 import MultiChoice from './(questions)/MultiChoice';
+import FreeForm from './(questions)/FreeForm';
 
 const lotrExcerpt = `Consulting  him  constantly  upon  the  growing  of  vegetables in  the  matter  of  ‘roots’,  especially  potatoes,  the  Gaffer  was recognized  as  the  leading  authority  by  all  in  the  neighbourhood  (including  himself). 
 
@@ -143,18 +144,7 @@ export function QuestionSematic({ q }: { q: Question }) {
   if (q.type === 'MultiChoice') {
     return <MultiChoice q={q} />;
   } else if (q.type === 'FreeForm') {
-    return (
-      <div>
-        <p className="font-bold">{q.questionStatement}</p>
-        <input
-          className="border-1 rounded-sm p-2 mt-2 w-1/2"
-          type="text"
-          id="freeform_answer"
-          name="freeform_answer"
-          placeholder="Your answer here"
-        />
-      </div>
-    );
+    return <FreeForm q={q} />;
   } else if (q.type === 'FillInGaps') {
     return <FillInGapsComp q={q} />;
   }
