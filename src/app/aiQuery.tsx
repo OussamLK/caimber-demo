@@ -107,15 +107,7 @@ export default function AiQuery({
           value={textValue}
           onChange={e => setTextValue(e.currentTarget.value)}
         />
-        {questions && (
-          <ul className="m-4">
-            {questions.map((q, key) => (
-              <li className="list-decimal mb-8" key={key}>
-                <QuestionSematic q={q} />
-              </li>
-            ))}
-          </ul>
-        )}
+        {questions && <QuestionList questions={questions} />}
         {currentQuestion && (
           <div className="m-2 mt-4">
             <QuestionSematic q={currentQuestion} />
@@ -213,5 +205,17 @@ function ChatBox({
         />
       </div>
     </div>
+  );
+}
+
+function QuestionList({ questions }: { questions: Question[] }) {
+  return (
+    <ul className="m-4">
+      {questions.map((q, key) => (
+        <li className="list-decimal mb-8" key={key}>
+          <QuestionSematic q={q} />
+        </li>
+      ))}
+    </ul>
   );
 }
