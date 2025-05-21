@@ -11,6 +11,7 @@ export default function RenderQuestion({ q }: { q: Question }) {
   } else if (q.type === 'FillInGaps') {
     return <FillInGapsComp q={q} />;
   } else {
+    //checking whether the if block exhausts the Question type
     const e: never = q;
   }
 }
