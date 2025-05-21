@@ -5,6 +5,7 @@ import SubmitButton from './SubmitButton';
 import FillInGapsComp from './(questions)/FillInGaps';
 import MultiChoice from './(questions)/MultiChoice';
 import FreeForm from './(questions)/FreeForm';
+import RenderQuestion from './(questions)/RenderQuestion';
 
 const lotrExcerpt = `Consulting  him  constantly  upon  the  growing  of  vegetables in  the  matter  of  ‘roots’,  especially  potatoes,  the  Gaffer  was recognized  as  the  leading  authority  by  all  in  the  neighbourhood  (including  himself). 
 
@@ -110,7 +111,7 @@ export default function AiQuery({
         {questions && <QuestionList questions={questions} />}
         {currentQuestion && (
           <div className="m-2 mt-4">
-            <QuestionSematic q={currentQuestion} />
+            <RenderQuestion q={currentQuestion} />
             <button
               onClick={keepCurrentQuestion}
               className="bg-blue-900 block text-white mt-8 mr-0 ml-auto p-2 rounded-md font-bold"
@@ -130,16 +131,6 @@ export default function AiQuery({
       />
     </div>
   );
-}
-
-export function QuestionSematic({ q }: { q: Question }) {
-  if (q.type === 'MultiChoice') {
-    return <MultiChoice q={q} />;
-  } else if (q.type === 'FreeForm') {
-    return <FreeForm q={q} />;
-  } else if (q.type === 'FillInGaps') {
-    return <FillInGapsComp q={q} />;
-  }
 }
 
 function ChatBox({
@@ -213,7 +204,7 @@ function QuestionList({ questions }: { questions: Question[] }) {
     <ul className="m-4">
       {questions.map((q, key) => (
         <li className="list-decimal mb-8" key={key}>
-          <QuestionSematic q={q} />
+          <RenderQuestion q={q} />
         </li>
       ))}
     </ul>
