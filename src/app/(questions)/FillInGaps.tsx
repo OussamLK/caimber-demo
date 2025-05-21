@@ -1,31 +1,45 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { type FillInGaps } from '../aiQuery';
 import Grading from './Grading';
 
 export default function FillInGapsComp({ q }: { q: FillInGaps }) {
+  const [currentGrade, setCurrentGrade] = useState<number>(0);
   return (
     <div>
       <p className="font-bold">{q.questionStatement}</p>
-      <Grading grading={q.grading} currentGrade={-2000} />
-      <FillInGapsText text={q.textToFill} />
+      <Grading grading={q.grading} currentGrade={currentGrade} />
+      <FillInGapsText q={q} setCurrentGrade={grade => setCurrentGrade(grade)} />
     </div>
   );
 }
 
-function FillInGapsText({ text }: { text: string }) {
-  const slices = splitTextAtGaps(text);
+function FillInGapsText({
+  q,
+  setCurrentGrade,
+}: {
+  q: FillInGaps;
+  setCurrentGrade: (grade: number) => void;
+}) {
+  const slices = splitTextAtGaps(q.textToFill);
   const inputSandwich = [<span key={0}>{slices[0]}</span>];
   const [gapValues, setGapValues] = useState<string[]>(
     Array(slices.length - 1).fill('')
   );
+  const currentGrade = gapValues
+    .map((v, i) =>
+      v === q.gaps[i].correctAnswer ? q.grading.correct : q.grading.wrong
+    )
+    .reduce((s, i) => s + i);
+  useEffect(() => {
+    setCurrentGrade(currentGrade);
+  }, [currentGrade]);
+  console.debug(currentGrade);
   const inputs: React.ReactNode[] = [];
   slices.slice(1).forEach((slice, key) => {
     const newInput = (
       <input
         value={gapValues[key]}
         onChange={e => {
-          console.debug(e);
-          console.debug(`key is ${key} and gapValue is ${gapValues[key]}`);
           setGapValues(prev => [
             ...prev.slice(0, key),
             e.target.value,
