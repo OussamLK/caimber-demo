@@ -4,7 +4,11 @@ export default function MultiChoice({ q }: { q: MultiChoice }) {
   return (
     <div>
       <fieldset>
-        <p className="font-bold">{q.questionStatement}</p>
+        <p className="font-bold">{q.questionStatement} </p>
+        <p className="text-blue-800">
+          (<span className="font-bold">Grading</span>: correct answer gets a{' '}
+          {q.grading.correct}, wrong answer gets a {q.grading.wrong})
+        </p>
         {q.choices.map(choice => (
           <div key={choice.id}>
             <label
