@@ -1,4 +1,18 @@
 import { GoogleGenAI } from '@google/genai';
+export const serverSideRawQuery = async (q: string): Promise<object> => {
+  const client = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+  const resp = await client.models.generateContent({
+    model: 'gemini-2.0-flash-001',
+    contents: q,
+    config: {
+      responseMimeType: 'application/json',
+    },
+  });
+  if (resp.text === undefined) {
+    throw 'gemini answer undefined';
+  }
+  return JSON.parse(resp.text);
+};
 
 export default class MLL<AbstractSyntax> {
   private _history: string[];
@@ -12,20 +26,6 @@ export default class MLL<AbstractSyntax> {
     this._rawQuery = queryFunction;
     this._AbstractSyntaxString = AbstractSyntaxString;
   }
-  static serverSideRawQuery = async (q: string): Promise<object> => {
-    const client = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-    const resp = await client.models.generateContent({
-      model: 'gemini-2.0-flash-001',
-      contents: q,
-      config: {
-        responseMimeType: 'application/json',
-      },
-    });
-    if (resp.text === undefined) {
-      throw 'gemini answer undefined';
-    }
-    return JSON.parse(resp.text);
-  };
   makeQuery = async (
     query: string,
     context: string,
