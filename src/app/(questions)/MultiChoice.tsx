@@ -1,10 +1,6 @@
 import { useState } from 'react';
 import { type MultiChoice } from '../aiQuery';
-
-function pointsLabel(points: number) {
-  if (points === 1 || points === -1) return `${points} point`;
-  else return `${points} points`;
-}
+import Grading from './Grading';
 
 export default function MultiChoice({ q }: { q: MultiChoice }) {
   const [currentChoice, setCurrentChoice] = useState<number | undefined>(
@@ -17,13 +13,7 @@ export default function MultiChoice({ q }: { q: MultiChoice }) {
     <div>
       <fieldset>
         <p className="font-bold">{q.questionStatement} </p>
-        <p className="text-blue-800">
-          Current grade is <span className="font-bold">{currentGrade}</span> (
-          <span className="font-bold">Grading</span>: correct answer gets{' '}
-          {pointsLabel(q.grading.correct)}, wrong answer gets{' '}
-          {pointsLabel(q.grading.wrong)})
-        </p>
-
+        <Grading grading={q.grading} currentGrade={currentGrade} />
         {q.choices.map(choice => (
           <div key={choice.id}>
             <label
