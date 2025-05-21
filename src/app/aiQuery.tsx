@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react';
 import MLL from '../mll';
 import SubmitButton from './SubmitButton';
 import FillInGapsComp from './(questions)/FillInGaps';
+import MultiChoice from './(questions)/MultiChoice';
 
 const lotrExcerpt = `Consulting  him  constantly  upon  the  growing  of  vegetables in  the  matter  of  ‘roots’,  especially  potatoes,  the  Gaffer  was recognized  as  the  leading  authority  by  all  in  the  neighbourhood  (including  himself). 
 
@@ -140,31 +141,7 @@ export default function AiQuery({
 
 export function QuestionSematic({ q }: { q: Question }) {
   if (q.type === 'MultiChoice') {
-    return (
-      <div>
-        <fieldset>
-          <p className="font-bold">{q.questionStatement}</p>
-          {q.choices.map(choice => (
-            <div key={choice.id}>
-              <label
-                className={
-                  choice.id === q.correctAnswerId ? 'text-green-600' : ''
-                }
-                htmlFor={choice.id.toString()}
-              >
-                {choice.prompt}
-              </label>
-              <input
-                type="radio"
-                id={choice.id.toString()}
-                name={`choices`}
-                value={choice.id}
-              />
-            </div>
-          ))}
-        </fieldset>
-      </div>
-    );
+    return <MultiChoice q={q} />;
   } else if (q.type === 'FreeForm') {
     return (
       <div>

@@ -1,4 +1,4 @@
-import { type FillInGaps } from '../(questions)/FillInGaps';
+import { type FillInGaps } from '../aiQuery';
 
 export default function FillInGapsComp({ q }: { q: FillInGaps }) {
   return (
