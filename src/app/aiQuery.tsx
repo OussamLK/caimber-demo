@@ -1,5 +1,5 @@
 'use client';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import MLL from '../mll';
 import SubmitButton from './SubmitButton';
 import FillInGapsComp from './(questions)/FillInGaps';
@@ -87,6 +87,7 @@ export default function AiQuery({
   );
   const [questions, setQuestions] = useState<Question[]>([]);
   const [textValue, setTextValue] = useState<string>(lotrExcerpt);
+  const currentQuestionRef = useRef<HTMLDivElement | null>(null);
   const mll = useMemo<MLL<Question>>(
     //MLL has an internal history state that I want to keep between renders
     () => new MLL<Question>(queryServerAction, questionSyntaxString),
@@ -99,6 +100,12 @@ export default function AiQuery({
     setQuestions(questions => [...questions, currentQuestion]);
     setCurrentQuestion(undefined);
   }
+
+  useEffect(() => {
+    if (currentQuestionRef.current !== null) {
+      currentQuestionRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [currentQuestion]);
 
   return (
     <div className="flex gap-8 box-border">
@@ -113,7 +120,7 @@ export default function AiQuery({
           />
           {questions && <QuestionList questions={questions} />}
           {currentQuestion && (
-            <div className="m-2 mt-4">
+            <div ref={currentQuestionRef} className="m-2 mt-4">
               <RenderQuestion q={currentQuestion} />
               <button
                 onClick={keepCurrentQuestion}
