@@ -28,7 +28,7 @@ export default function MultiChoice({
               {choice.prompt}
             </label>
             <input
-              className="ml-2 accent-slate-600"
+              className="ml-2 accent-slate-600 mb-2"
               type="radio"
               id={choice.id.toString()}
               name={`choices_${id}`}
