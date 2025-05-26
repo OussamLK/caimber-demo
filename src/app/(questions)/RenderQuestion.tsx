@@ -5,13 +5,13 @@ import FillInGapsComp from './FillInGaps';
 
 export default function RenderQuestion({
   q,
-  key,
+  id,
 }: {
   q: Question;
-  key: string | number;
+  id: string | number;
 }) {
   if (q.type === 'MultiChoice') {
-    return <MultiChoice key={key} q={q} />;
+    return <MultiChoice id={id} q={q} />;
   } else if (q.type === 'FreeForm') {
     return <FreeForm q={q} />;
   } else if (q.type === 'FillInGaps') {

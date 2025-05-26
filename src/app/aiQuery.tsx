@@ -131,7 +131,7 @@ export default function AiQuery({
           {questions && <QuestionList questions={questions} />}
           {currentQuestion && (
             <div ref={currentQuestionRef} className="m-2 mt-4">
-              <RenderQuestion key={0} q={currentQuestion} />
+              <RenderQuestion id={'new'} q={currentQuestion} />
               <button
                 onClick={keepCurrentQuestion}
                 className="bg-blue-900 block text-white mt-8 mr-0 ml-auto p-2 rounded-md font-bold"
@@ -228,7 +228,7 @@ function QuestionList({ questions }: { questions: Question[] }) {
     <ul className="m-4">
       {questions.map((q, key) => (
         <li className="list-decimal mb-8" key={key}>
-          <RenderQuestion key={key} q={q} />
+          <RenderQuestion id={key} q={q} />
         </li>
       ))}
     </ul>

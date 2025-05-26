@@ -35,7 +35,6 @@ function FillInGapsText({
   useEffect(() => {
     setCurrentGrade(currentGrade);
   }, [currentGrade]);
-  console.debug(currentGrade);
   const inputs: React.ReactNode[] = [];
   slices.slice(1).forEach((slice, key) => {
     const newInput = (

@@ -4,17 +4,16 @@ import Grading from './Grading';
 
 export default function MultiChoice({
   q,
-  key,
+  id,
 }: {
   q: MultiChoice;
-  key: string | number;
+  id: string | number;
 }) {
   const [currentChoice, setCurrentChoice] = useState<number | undefined>(
     undefined
   );
   const currentGrade =
     currentChoice === q.correctAnswerId ? q.grading.correct : q.grading.wrong;
-  console.debug(currentChoice);
   return (
     <div>
       <fieldset>
@@ -31,7 +30,7 @@ export default function MultiChoice({
             <input
               type="radio"
               id={choice.id.toString()}
-              name={`choices_${key}`}
+              name={`choices_${id}`}
               value={choice.id}
               onChange={() => setCurrentChoice(choice.id)}
             />
