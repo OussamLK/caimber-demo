@@ -7,6 +7,7 @@ import MultiChoice from './(questions)/MultiChoice';
 import FreeForm from './(questions)/FreeForm';
 import RenderQuestion from './(questions)/RenderQuestion';
 import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
 
 const lotrExcerpt = `Consulting  him  constantly  upon  the  growing  of  vegetables in  the  matter  of  ‘roots’,  especially  potatoes,  the  Gaffer  was recognized  as  the  leading  authority  by  all  in  the  neighbourhood  (including  himself). 
 
@@ -101,7 +102,7 @@ export default function AiQuery({
 
   return (
     <div className="flex gap-8 box-border">
-      <div className="flex-2 order-2 pt-20">
+      <div className="flex-2 order-2 pt-28 h-screen overflow-y-scroll">
         <textarea
           className="border-solid border-2 ml-2 p-4 rounded-xl"
           rows={10}
@@ -175,23 +176,26 @@ function ChatBox({
     <div className={className}>
       <div className="mt-auto mb-1 p-2">
         <br />
-        <label>
-          <p className="font-bold">What question do you want to create?</p>{' '}
-          <p className="text-sm">
+        <Label htmlFor={'query'} className="mb-4 flex-col text-lg">
+          <span className="font-bold">
+            What question do you want to create?
+          </span>{' '}
+          <span className="text-sm">
             (I can do free form, multiple choice, and fill in the gaps
             questions)
-          </p>
-          <Textarea
-            value={query}
-            onKeyDown={e => {
-              if (e.key == 'Enter') doAskQuestion();
-            }}
-            onChange={e => setQuery(e.currentTarget.value)}
-            className="border-solid border-2 m-2 p-2 min-w-full resize-none"
-          ></Textarea>
-        </label>
+          </span>
+        </Label>
+        <Textarea
+          value={query}
+          id={'query'}
+          onKeyDown={e => {
+            if (e.key == 'Enter') doAskQuestion();
+          }}
+          onChange={e => setQuery(e.currentTarget.value)}
+          className="border-solid box-border border-2 mr-4 mb-4 p-2 min-w-full resize-none"
+        ></Textarea>
         <SubmitButton
-          className="block mr-2 ml-auto"
+          className="block box-border mr-4 ml-auto"
           isLoading={isLoading}
           onClick={doAskQuestion}
         />

@@ -4,11 +4,10 @@ import { rawQuery } from './ServerActions';
 
 export default async function Home() {
   return (
-    <main className="m-0 h-full">
+    <main className="m-0 p-0 h-max-screen">
       <TypographyH1 className="text-center fixed bg-white mt-0">
         Homework Editor
       </TypographyH1>
-      <br />
       <AiQuery queryServerAction={rawQuery} />
     </main>
   );
