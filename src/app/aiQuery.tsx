@@ -6,6 +6,7 @@ import FillInGapsComp from './(questions)/FillInGaps';
 import MultiChoice from './(questions)/MultiChoice';
 import FreeForm from './(questions)/FreeForm';
 import RenderQuestion from './(questions)/RenderQuestion';
+import { Textarea } from '@/components/ui/textarea';
 
 const lotrExcerpt = `Consulting  him  constantly  upon  the  growing  of  vegetables in  the  matter  of  ‘roots’,  especially  potatoes,  the  Gaffer  was recognized  as  the  leading  authority  by  all  in  the  neighbourhood  (including  himself). 
 
@@ -99,10 +100,10 @@ export default function AiQuery({
   }
 
   return (
-    <div className="flex gap-8">
-      <div className="flex-2 order-2">
+    <div className="flex gap-8 box-border">
+      <div className="flex-2 order-2 pt-20">
         <textarea
-          className="border-solid border-2 ml-2 p-4 "
+          className="border-solid border-2 ml-2 p-4 rounded-xl"
           rows={10}
           cols={70}
           value={textValue}
@@ -122,7 +123,7 @@ export default function AiQuery({
         )}
       </div>
       <ChatBox
-        className="border-2 p-2 flex-1 order-1 min-w-min h-screen"
+        className="border-r-2 p-20 pl-3 pr-4 flex-1 order-1 min-w-min h-screen"
         setQuestion={(question: Question) => {
           setCurrentQuestion(question);
         }}
@@ -180,14 +181,14 @@ function ChatBox({
             (I can do free form, multiple choice, and fill in the gaps
             questions)
           </p>
-          <input
+          <Textarea
             value={query}
             onKeyDown={e => {
               if (e.key == 'Enter') doAskQuestion();
             }}
             onChange={e => setQuery(e.currentTarget.value)}
-            className="border-solid border-2 m-2 p-2 min-w-full"
-          ></input>
+            className="border-solid border-2 m-2 p-2 min-w-full resize-none"
+          ></Textarea>
         </label>
         <SubmitButton
           className="block mr-2 ml-auto"
