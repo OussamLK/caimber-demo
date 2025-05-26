@@ -122,7 +122,10 @@ export default function AiQuery({
           ) : (
             <div className="border-l-6 border-l-black pl-8 mb-12 box-border pt-2">
               {textValue.split('\n').map((t, key) => (
-                <p key={key} className="mb-4 font-serif text-lg">
+                <p
+                  key={key}
+                  className="mb-4 font-serif text-lg/8 tracking-normal "
+                >
                   {t}
                 </p>
               ))}
@@ -143,7 +146,7 @@ export default function AiQuery({
         </div>
       </div>
       <ChatBox
-        className="border-r-2 p-20 pl-3 pr-4 flex-1 order-1 min-w-min h-screen"
+        className="border-r-2 p-20 pl-3 pr-4 flex-0 basis-96 order-1 min-w-min h-screen"
         setQuestion={(question: Question) => {
           setCurrentQuestion(question);
         }}

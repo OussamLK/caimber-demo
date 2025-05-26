@@ -22,12 +22,13 @@ export default function MultiChoice({
         {q.choices.map(choice => (
           <div key={choice.id}>
             <label
-              className={choice.id === q.correctAnswerId ? 'font-semibold' : ''}
+              className={`${choice.id === q.correctAnswerId ? 'font-semibold' : ''}`}
               htmlFor={choice.id.toString()}
             >
               {choice.prompt}
             </label>
             <input
+              className="ml-2 accent-slate-600"
               type="radio"
               id={choice.id.toString()}
               name={`choices_${id}`}
