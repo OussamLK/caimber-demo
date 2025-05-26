@@ -102,26 +102,28 @@ export default function AiQuery({
 
   return (
     <div className="flex gap-8 box-border">
-      <div className="flex-2 order-2 pt-28 h-screen overflow-y-scroll">
-        <textarea
-          className="border-solid border-2 ml-2 p-4 rounded-xl"
-          rows={10}
-          cols={70}
-          value={textValue}
-          onChange={e => setTextValue(e.currentTarget.value)}
-        />
-        {questions && <QuestionList questions={questions} />}
-        {currentQuestion && (
-          <div className="m-2 mt-4">
-            <RenderQuestion q={currentQuestion} />
-            <button
-              onClick={keepCurrentQuestion}
-              className="bg-blue-900 block text-white mt-8 mr-0 ml-auto p-2 rounded-md font-bold"
-            >
-              Keep this question
-            </button>
-          </div>
-        )}
+      <div className="flex-2 order-2 pt-28 h-screen overflow-y-scroll m-auto">
+        <div className="w-2/3 m-auto">
+          <textarea
+            className="border-solid border-2 ml-2 mb-4 p-4 rounded-xl"
+            rows={13}
+            cols={50}
+            value={textValue}
+            onChange={e => setTextValue(e.currentTarget.value)}
+          />
+          {questions && <QuestionList questions={questions} />}
+          {currentQuestion && (
+            <div className="m-2 mt-4">
+              <RenderQuestion q={currentQuestion} />
+              <button
+                onClick={keepCurrentQuestion}
+                className="bg-blue-900 block text-white mt-8 mr-0 ml-auto p-2 rounded-md font-bold"
+              >
+                Keep this question
+              </button>
+            </div>
+          )}
+        </div>
       </div>
       <ChatBox
         className="border-r-2 p-20 pl-3 pr-4 flex-1 order-1 min-w-min h-screen"
@@ -195,7 +197,7 @@ function ChatBox({
           className="border-solid box-border border-2 mr-4 mb-4 p-2 min-w-full resize-none"
         ></Textarea>
         <SubmitButton
-          className="block box-border mr-4 ml-auto"
+          className="block box-border mr-0 ml-auto"
           isLoading={isLoading}
           onClick={doAskQuestion}
         />
