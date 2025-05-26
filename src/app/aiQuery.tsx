@@ -110,11 +110,11 @@ export default function AiQuery({
   return (
     <div className="flex gap-8 box-border">
       <div className="flex-2 order-2 pt-28 h-screen overflow-y-scroll m-auto">
-        <div className="w-2/3 m-auto">
+        <div className="w-4/5 m-auto">
           <textarea
             className="border-solid border-2 ml-2 mb-4 p-4 rounded-xl"
             rows={13}
-            cols={50}
+            cols={60}
             value={textValue}
             onChange={e => setTextValue(e.currentTarget.value)}
           />
