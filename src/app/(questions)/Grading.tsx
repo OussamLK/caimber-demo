@@ -11,7 +11,7 @@ export default function Grading({
 }) {
   return (
     <>
-      <p className="text-blue-800">
+      <p className="text-gray-600 text-sm italic">
         Current grade is <span className="font-bold">{currentGrade}</span> (
         <span className="font-bold">Grading</span>: correct answer gets{' '}
         {pointsLabel(grading.correct)}, wrong answer gets{' '}

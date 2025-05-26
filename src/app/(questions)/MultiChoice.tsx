@@ -17,9 +17,7 @@ export default function MultiChoice({ q }: { q: MultiChoice }) {
         {q.choices.map(choice => (
           <div key={choice.id}>
             <label
-              className={
-                choice.id === q.correctAnswerId ? 'text-green-600' : ''
-              }
+              className={choice.id === q.correctAnswerId ? 'font-semibold' : ''}
               htmlFor={choice.id.toString()}
             >
               {choice.prompt}
