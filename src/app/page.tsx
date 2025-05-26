@@ -22,7 +22,7 @@ function TypographyH1({
 }) {
   return (
     <h1
-      className={`p-4 m-0 border-b-2 w-screen scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl ${className}`}
+      className={`p-2 m-0 border-b-2 border-b-black w-screen scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-4xl ${className}`}
     >
       {children}
     </h1>

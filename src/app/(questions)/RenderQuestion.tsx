@@ -3,9 +3,15 @@ import MultiChoice from './MultiChoice';
 import FreeForm from './FreeForm';
 import FillInGapsComp from './FillInGaps';
 
-export default function RenderQuestion({ q }: { q: Question }) {
+export default function RenderQuestion({
+  q,
+  key,
+}: {
+  q: Question;
+  key: string | number;
+}) {
   if (q.type === 'MultiChoice') {
-    return <MultiChoice q={q} />;
+    return <MultiChoice key={key} q={q} />;
   } else if (q.type === 'FreeForm') {
     return <FreeForm q={q} />;
   } else if (q.type === 'FillInGaps') {

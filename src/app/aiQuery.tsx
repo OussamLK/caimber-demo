@@ -111,17 +111,27 @@ export default function AiQuery({
     <div className="flex gap-8 box-border">
       <div className="flex-2 order-2 pt-28 h-screen overflow-y-scroll m-auto">
         <div className="w-4/5 m-auto">
-          <textarea
-            className="border-solid border-2 ml-2 mb-4 p-4 rounded-xl"
-            rows={13}
-            cols={60}
-            value={textValue}
-            onChange={e => setTextValue(e.currentTarget.value)}
-          />
+          {questions.length === 0 ? (
+            <textarea
+              className="border-solid border-2 ml-2 mb-4 p-4 rounded-xl"
+              rows={24}
+              cols={60}
+              value={textValue}
+              onChange={e => setTextValue(e.currentTarget.value)}
+            />
+          ) : (
+            <div className="border-l-6 border-l-black pl-8 mb-12 box-border pt-2">
+              {textValue.split('\n').map((t, key) => (
+                <p key={key} className="mb-4 font-serif text-lg">
+                  {t}
+                </p>
+              ))}
+            </div>
+          )}
           {questions && <QuestionList questions={questions} />}
           {currentQuestion && (
             <div ref={currentQuestionRef} className="m-2 mt-4">
-              <RenderQuestion q={currentQuestion} />
+              <RenderQuestion key={0} q={currentQuestion} />
               <button
                 onClick={keepCurrentQuestion}
                 className="bg-blue-900 block text-white mt-8 mr-0 ml-auto p-2 rounded-md font-bold"
@@ -218,7 +228,7 @@ function QuestionList({ questions }: { questions: Question[] }) {
     <ul className="m-4">
       {questions.map((q, key) => (
         <li className="list-decimal mb-8" key={key}>
-          <RenderQuestion q={q} />
+          <RenderQuestion key={key} q={q} />
         </li>
       ))}
     </ul>

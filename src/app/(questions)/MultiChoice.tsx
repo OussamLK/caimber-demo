@@ -2,7 +2,13 @@ import { useState } from 'react';
 import { type MultiChoice } from '../aiQuery';
 import Grading from './Grading';
 
-export default function MultiChoice({ q }: { q: MultiChoice }) {
+export default function MultiChoice({
+  q,
+  key,
+}: {
+  q: MultiChoice;
+  key: string | number;
+}) {
   const [currentChoice, setCurrentChoice] = useState<number | undefined>(
     undefined
   );
@@ -25,7 +31,7 @@ export default function MultiChoice({ q }: { q: MultiChoice }) {
             <input
               type="radio"
               id={choice.id.toString()}
-              name={`choices`}
+              name={`choices_${key}`}
               value={choice.id}
               onChange={() => setCurrentChoice(choice.id)}
             />
